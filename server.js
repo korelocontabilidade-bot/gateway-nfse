@@ -16,6 +16,26 @@ app.get("/nfse/distribuicao", (req, res) => {
 app.get("/nfse/documento", (req, res) => {
   const nsu = req.query.nsu || "0";
 
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<Nfse>
+  <InfNfse>
+    <Numero>${nsu}</Numero>
+    <Valor>100.00</Valor>
+    <Prestador>Empresa Teste</Prestador>
+  </InfNfse>
+</Nfse>`;
+
+  // MUITO IMPORTANTE: responder como XML (não JSON)
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+
+  // MUITO IMPORTANTE: isso força “download” em muitas ferramentas
+  res.setHeader("Content-Disposition", `attachment; filename="nfse_${nsu}.xml"`);
+
+  res.status(200).send(xml);
+});
+
+  const nsu = req.query.nsu || "0";
+
   const xml = `
 <Nfse>
   <InfNfse>
